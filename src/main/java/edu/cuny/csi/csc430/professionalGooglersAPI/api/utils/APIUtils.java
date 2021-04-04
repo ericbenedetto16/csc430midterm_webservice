@@ -44,7 +44,7 @@ public class APIUtils {
 		return "{\"success\": " + success + ", \"" + secondAttribute + "\":";
 	}
 	
-	public static String baseJSON(Boolean success, String secondAttribute, Object o) {
+	public static String JSONBuilder(Boolean success, String secondAttribute, Object o) {
 		try {
 			return "{\"success\": " + success + ", \"" + secondAttribute + "\":" + new ObjectMapper().writeValueAsString(o) + "}";
 		} catch (JsonProcessingException e) {

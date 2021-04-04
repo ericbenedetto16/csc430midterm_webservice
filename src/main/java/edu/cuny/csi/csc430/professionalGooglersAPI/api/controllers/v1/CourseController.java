@@ -42,11 +42,11 @@ public class CourseController {
 		try {
 			Iterable<Course> courses = courseRepo.findAll();
 			
-			return APIUtils.baseJSON(true, "courses", courses);
+			return APIUtils.JSONBuilder(true, "courses", courses);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "courses") + "[]}";
+			return APIUtils.ERROR_JSON;
 		}
  	}
 	
@@ -68,11 +68,11 @@ public class CourseController {
 			course.setTeacher(teacher);
 			courseRepo.save(course);
 			
-			return APIUtils.baseJSON(true, "course", course);
+			return APIUtils.JSONBuilder(true, "course", course);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "course") + null + "}";
+			return APIUtils.ERROR_JSON;
 		}
 	}
 	
@@ -81,9 +81,9 @@ public class CourseController {
 		try {
 			Optional<Course> course = courseRepo.findById(id);
 
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "course") + null + "}";
+			if(course.isEmpty()) return APIUtils.JSONBuilder(false, "course", null);
 					
-			return APIUtils.baseJSON(true, "course", course.get());
+			return APIUtils.JSONBuilder(true, "course", course.get());
 		}catch(Exception e) {
 			e.printStackTrace();
 			
@@ -113,11 +113,11 @@ public class CourseController {
 			modifiedCourse.setTeacher(teacher);
 			modifiedCourse = courseRepo.save(course.get());
 			
-			return APIUtils.baseJSON(true, "course", modifiedCourse);
+			return APIUtils.JSONBuilder(true, "course", modifiedCourse);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
+			return APIUtils.ERROR_JSON;
 		}
 	}
 	
@@ -131,16 +131,16 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}";
+			if(course.isEmpty()) return APIUtils.JSONBuilder(false, "msg", "Course Not Found.");
 			
 			enrollmentRepo.deleteByCourse(course.get());
 			courseRepo.deleteById(id);
 			
-			return APIUtils.baseJSON(true, "msg") + "\"Course Sucessfully Deleted\"}";
+			return APIUtils.JSONBuilder(true, "msg", "Course Successfully Deleted.");
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
+			return APIUtils.ERROR_JSON;
 		}
 	}
 	
@@ -154,15 +154,15 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 			
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}"; 
+			if(course.isEmpty()) return APIUtils.JSONBuilder(false, "msg", "Course Not Found"); 
 			
 			Iterable<Enrollment> enrollments = enrollmentRepo.findByCourse(course.get());
 			
-			return APIUtils.baseJSON(true, "students", enrollments);
+			return APIUtils.JSONBuilder(true, "students", enrollments);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
+			return APIUtils.ERROR_JSON;
 		}
 	}
 	
@@ -175,18 +175,18 @@ public class CourseController {
 			if(!AuthorizationMiddleware.authorize(user, new HashSet<String>(Arrays.asList(Roles.ADMIN.getRole())))) return APIUtils.UNAUTHORIZED_JSON;
 			
 			Optional<Course> course = courseRepo.findById(id);
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}";			
+			if(course.isEmpty()) return APIUtils.JSONBuilder(false, "msg", "Course Not Found");			
 			
 			Optional<Faculty> teacher = facultyRepo.findById(teacherId);
 			if(teacher.isEmpty()) return APIUtils.BAD_REQUEST_JSON;		
 			
 			course.get().setTeacher(teacher.get());
 			
-			return APIUtils.baseJSON(true, "teacher", course.get().getTeacher());
+			return APIUtils.JSONBuilder(true, "teacher", course.get().getTeacher());
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
+			return APIUtils.ERROR_JSON;
 		}
 	}
 }

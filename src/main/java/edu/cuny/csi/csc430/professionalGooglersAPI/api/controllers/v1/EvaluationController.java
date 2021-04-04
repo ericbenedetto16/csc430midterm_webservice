@@ -41,7 +41,7 @@ public class EvaluationController {
 		try {
 			Iterable<Evaluation> evaluations = evaluationRepo.findAll();
 			
-			return APIUtils.baseJSON(true, "evaluations", evaluations);
+			return APIUtils.JSONBuilder(true, "evaluations", evaluations);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
@@ -70,7 +70,7 @@ public class EvaluationController {
 			
 			evaluation = evaluationRepo.save(evaluation);
 		
-			return APIUtils.baseJSON(true, "evaluation", evaluation);
+			return APIUtils.JSONBuilder(true, "evaluation", evaluation);
 		}catch(Exception e) {
 			e.printStackTrace();
 			
