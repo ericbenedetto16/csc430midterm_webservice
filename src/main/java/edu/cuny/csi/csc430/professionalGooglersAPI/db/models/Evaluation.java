@@ -37,7 +37,7 @@ public class Evaluation {
 		return teacher;
 	}
 	
-	public void setFirstName(Faculty teacher) {
+	public void setTeacher(Faculty teacher) {
 		this.teacher = teacher;
 	}
 	
