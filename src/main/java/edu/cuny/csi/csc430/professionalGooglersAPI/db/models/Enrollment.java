@@ -1,5 +1,6 @@
 package edu.cuny.csi.csc430.professionalGooglersAPI.db.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,8 @@ public class Enrollment {
 	@ManyToOne
 	private Course course;
 	
+	@Column(nullable = true)
+	private Integer grade;
 	
 	public Integer getId() {
 		return id;
@@ -47,5 +50,13 @@ public class Enrollment {
 	
 	public void setCourse(Course course) {
 		this.course = course;
+	}
+	
+	public Integer getGrade() {
+		return grade;
+	}
+	
+	public void setGrade(Integer grade) {
+		this.grade = grade;
 	}
 }
