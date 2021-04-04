@@ -62,7 +62,7 @@ public class CourseController {
 			
 			Faculty teacher = facultyRepo.findByUserId(coursePayload.getTeacher());
 			
-			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
+			if(teacher == null) return APIUtils.BAD_REQUEST_JSON;
 			
 			course.setName(coursePayload.getName());
 			course.setTeacher(teacher);
@@ -81,11 +81,13 @@ public class CourseController {
 		try {
 			Optional<Course> course = courseRepo.findById(id);
 
-			return course.isEmpty() ? APIUtils.baseJSON(false, "course") + null + "}": APIUtils.baseJSON(true, "course", course.get());
+			if(course.isEmpty()) return APIUtils.baseJSON(false, "course") + null + "}";
+					
+			return APIUtils.baseJSON(true, "course", course.get());
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return null;
+			return APIUtils.ERROR_JSON;
 		}
 	}
 	
@@ -99,11 +101,11 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 	
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
+			if(course.isEmpty()) return APIUtils.BAD_REQUEST_JSON;
 			
 			Faculty teacher = facultyRepo.findByUserId(coursePayload.getTeacher());
 			
-			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
+			if(teacher == null) return APIUtils.BAD_REQUEST_JSON;
 			
 			Course modifiedCourse = course.get();
 			
@@ -176,7 +178,7 @@ public class CourseController {
 			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}";			
 			
 			Optional<Faculty> teacher = facultyRepo.findById(teacherId);
-			if(teacher.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";			
+			if(teacher.isEmpty()) return APIUtils.BAD_REQUEST_JSON;		
 			
 			course.get().setTeacher(teacher.get());
 			

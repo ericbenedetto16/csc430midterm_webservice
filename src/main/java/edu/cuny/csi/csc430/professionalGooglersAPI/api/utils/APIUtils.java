@@ -12,6 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class APIUtils {
 	public static final String LOGGED_OUT_JSON = "{\"success\": false, \"msg\": \"You Must Be Logged In to Access This Resource\"}";
 	public static final String UNAUTHORIZED_JSON = "{\"success\": false, \"msg\": \"You Are Not Authorized to Access This Resource\"}";
+	public static final String ERROR_JSON = "{\"success\": false, \"msg\": \"Error.\"}";
+	public static final String BAD_REQUEST_JSON = "{\"success\": false, \"msg\": \"Bad Request.\"}";
 	
 	public static HasherObject hasher(byte[] salt, String password) {
 		try {
