@@ -25,19 +25,19 @@ public class LoginController {
 		try {
 			User user = userRepo.findByEmail(loginCredentials.getUserName());
 			
-			if(user == null) return APIUtils.baseJSON(false, "msg") + "\"Invalid Username or Password.\"";
+			if(user == null) return APIUtils.baseJSON(false, "msg") + "\"Invalid Username or Password.\"}";
 			
 			AuthenticationObject authObject = AuthenticationMiddleware.auth(user, loginCredentials.getUserName(), user.getSalt(), loginCredentials.getPassword(), sessionRepo);
 			
 			if(authObject.getSuccess()) {
-				return APIUtils.baseJSON(true, "access_token") + "\"" + authObject.getSessionToken() + "\"";
+				return APIUtils.baseJSON(true, "access_token") + "\"" + authObject.getSessionToken() + "\"}";
 			}
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Invalid Username or Password.\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Invalid Username or Password.\"}";
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
 		}
 	}
 }
