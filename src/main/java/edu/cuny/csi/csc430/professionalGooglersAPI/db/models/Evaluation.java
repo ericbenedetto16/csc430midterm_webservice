@@ -1,5 +1,6 @@
 package edu.cuny.csi.csc430.professionalGooglersAPI.db.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,6 +24,9 @@ public class Evaluation {
 	@JoinColumn(nullable = false)
 	@ManyToOne
 	private Student student;
+	
+	@Column(nullable = false)
+	private Integer rating;
 
 
 	public Integer getId() {
@@ -47,5 +51,13 @@ public class Evaluation {
 	
 	public void setStudent(Student student	) {
 		this.student = student;
+	}
+	
+	public Integer getRating() {
+		return rating;
+	}
+	
+	public void setRating(Integer rating) {
+		this.rating = rating;
 	}
 }
