@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value="/api/v1/faculty", produces= {"application/json"})
+@RequestMapping(value="/api/v1/faculty", produces={"application/json"})
 public class FacultyController {
 	@GetMapping("/") 
 	public String getAllFaculty() {
@@ -20,7 +20,6 @@ public class FacultyController {
 	public String createFaculty() {
 		return "{\"success\": true, \"msg\": \"this is going to create a faculty member\"}";
 	}
-	
 	
 	@GetMapping("/{id}") 
 	public String getFacultyByID(@PathVariable Integer id) {
