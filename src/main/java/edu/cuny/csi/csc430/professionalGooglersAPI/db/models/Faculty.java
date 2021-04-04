@@ -21,6 +21,9 @@ public class Faculty {
 	@Column(nullable = false)
 	private Double salary;
 	
+	@Column(columnDefinition = "BOOLEAN DEFAULT true NOT NULL")
+	private Boolean active = true;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -43,6 +46,14 @@ public class Faculty {
 	
 	public void setSalary(Double salary) {
 		this.salary = salary;
+	}
+	
+	public Boolean getActive() {
+		return active;
+	}
+	
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 	
 }
