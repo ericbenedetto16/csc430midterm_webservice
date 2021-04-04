@@ -57,14 +57,14 @@ public class EvaluationController {
 			
 			if(!AuthorizationMiddleware.authorize(user, new HashSet<String>(Arrays.asList(Roles.STUDENT.getRole())))) return APIUtils.UNAUTHORIZED_JSON;
 
-			Optional<Student> student = studentRepo.findById(evaluationPayload.getStudentId());
+			Student student = studentRepo.findByUser(user);
 			Optional<Faculty> teacher = facultyRepo.findById(evaluationPayload.getTeacherId());
-	
-			if(student.isEmpty() || teacher.isEmpty() || evaluationPayload.getRating() == null) return APIUtils.BAD_REQUEST_JSON;
+
+			if(student == null || teacher.isEmpty() || evaluationPayload.getRating() == null) return APIUtils.BAD_REQUEST_JSON;
 			
 			Evaluation evaluation = new Evaluation();
 			
-			evaluation.setStudent(student.get());
+			evaluation.setStudent(student);
 			evaluation.setTeacher(teacher.get());
 			evaluation.setRating(evaluationPayload.getRating());
 			

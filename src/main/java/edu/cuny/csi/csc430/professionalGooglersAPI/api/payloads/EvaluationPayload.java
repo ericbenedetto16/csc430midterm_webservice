@@ -3,21 +3,16 @@ package edu.cuny.csi.csc430.professionalGooglersAPI.api.payloads;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class EvaluationPayload {
-	private Integer studentId, teacherId, rating;
+	private Integer teacher, rating;
 
 	@JsonCreator
-	public EvaluationPayload(Integer studentId, Integer teacherId, Integer rating) {
-		this.studentId = studentId;
-		this.teacherId = teacherId;
+	public EvaluationPayload(Integer teacher, Integer rating) {
+		this.teacher = teacher;
 		this.rating = rating;
 	}
 	
-	public Integer getStudentId() {
-		return studentId;
-	}
-	
 	public Integer getTeacherId() {
-		return teacherId;
+		return teacher;
 	}
 	
 	public Integer getRating() {
