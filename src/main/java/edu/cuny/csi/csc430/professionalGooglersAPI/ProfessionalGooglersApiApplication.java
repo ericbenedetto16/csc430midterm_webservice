@@ -9,12 +9,14 @@ import org.springframework.context.annotation.Bean;
 
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.FacultyRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.RoleRepository;
+import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.StudentRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.UserRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.APIUtils;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.HasherObject;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.Roles;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Faculty;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Role;
+import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Student;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.User;
 
 @SpringBootApplication
@@ -24,9 +26,9 @@ public class ProfessionalGooglersApiApplication {
 	}
 	
 	@Bean
-	CommandLineRunner seeders(RoleRepository roleRepo, UserRepository userRepo, FacultyRepository facultyRepo) {
+	CommandLineRunner seeders(RoleRepository roleRepo, UserRepository userRepo, FacultyRepository facultyRepo, StudentRepository studentRepo) {
 		return (args) -> {
-			// Run Seeders
+			// Run Seeders to Create All Roles, an Admin, Teacher, Student, and Parent
 			Role adminRole = roleRepo.findByRoleName(Roles.ADMIN.getRole());
 			if(adminRole == null) {
 				adminRole = new Role();
@@ -58,7 +60,7 @@ public class ProfessionalGooglersApiApplication {
 			User adminUser = userRepo.findByFirstNameAndLastName("Admin", "Istrator");
 			if(adminUser == null) {
 				adminUser = new User();
-				adminUser.setEmail("admin@schoolsystem.com");
+				adminUser.setEmail("admin.istrator@schoolsystem.com");
 				adminUser.setFirstName("Admin");
 				adminUser.setLastName("Istrator");
 				
@@ -79,7 +81,7 @@ public class ProfessionalGooglersApiApplication {
 			User teacherUser = userRepo.findByFirstNameAndLastName("Teacher", "Dude");
 			if(teacherUser == null) {
 				teacherUser = new User();
-				teacherUser.setEmail("teacherdude@schoolsystem.com");
+				teacherUser.setEmail("teacher.dude@schoolsystem.com");
 				teacherUser.setFirstName("Teacher");
 				teacherUser.setLastName("Dude");
 				
@@ -104,6 +106,58 @@ public class ProfessionalGooglersApiApplication {
 				teacherFaculty.setSalary((double) 65000);
 				
 				teacherFaculty = facultyRepo.save(teacherFaculty);
+			}
+			
+			User studentUser = userRepo.findByFirstNameAndLastName("Stu", "Dent");
+			if(studentUser == null) {
+				studentUser = new User();
+				studentUser.setFirstName("Stu");
+				studentUser.setLastName("Dent");
+				studentUser.setEmail("stu.dent@schoolsystem.com");
+				
+				SecureRandom random = new SecureRandom();
+				byte[] salt = new byte[16];
+				random.nextBytes(salt);
+				
+				String password = "studentpassword";
+				HasherObject encoded = APIUtils.hasher(salt, password);
+				
+				studentUser.setSalt(encoded.getEncodedSalt());
+				studentUser.setPassword(encoded.getEncodedHash());
+				
+				studentUser.setRole(studentRole);
+				studentUser = userRepo.save(studentUser);
+			}
+
+			User parentUser = userRepo.findByFirstNameAndLastName("Stu", "Dent");
+			if(parentUser == null) {
+				parentUser = new User();
+				parentUser.setFirstName("Par");
+				parentUser.setLastName("Ent");
+				parentUser.setEmail("par.ent@schoolsystem.com");
+				
+				SecureRandom random = new SecureRandom();
+				byte[] salt = new byte[16];
+				random.nextBytes(salt);
+				
+				String password = "parentpassword";
+				HasherObject encoded = APIUtils.hasher(salt, password);
+				
+				parentUser.setSalt(encoded.getEncodedSalt());
+				parentUser.setPassword(encoded.getEncodedHash());
+				
+				parentUser.setRole(parentRole);
+				parentUser = userRepo.save(parentUser);
+			}
+			
+			Student student = studentRepo.findByUser(studentUser);
+			if(student == null) {
+				student = new Student();
+				student.setUser(studentUser);
+				student.setParent(parentUser);
+				student.setGrade(10);
+				
+				student = studentRepo.save(student);
 			}
 		};
 	}
