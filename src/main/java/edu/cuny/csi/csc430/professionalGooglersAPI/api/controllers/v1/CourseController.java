@@ -46,7 +46,7 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "courses") + "[]";
+			return APIUtils.baseJSON(false, "courses") + "[]}";
 		}
  	}
 	
@@ -62,7 +62,7 @@ public class CourseController {
 			
 			Faculty teacher = facultyRepo.findByUserId(coursePayload.getTeacher());
 			
-			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"";
+			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
 			
 			course.setName(coursePayload.getName());
 			course.setTeacher(teacher);
@@ -72,7 +72,7 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "course") + null;
+			return APIUtils.baseJSON(false, "course") + null + "}";
 		}
 	}
 	
@@ -81,7 +81,7 @@ public class CourseController {
 		try {
 			Optional<Course> course = courseRepo.findById(id);
 
-			return course.isEmpty() ? APIUtils.baseJSON(false, "course") + null : APIUtils.baseJSON(true, "course", course.get());
+			return course.isEmpty() ? APIUtils.baseJSON(false, "course") + null + "}": APIUtils.baseJSON(true, "course", course.get());
 		}catch(Exception e) {
 			e.printStackTrace();
 			
@@ -99,11 +99,11 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 	
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "Bad Request.";
+			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
 			
 			Faculty teacher = facultyRepo.findByUserId(coursePayload.getTeacher());
 			
-			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"";
+			if(teacher == null) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";
 			
 			Course modifiedCourse = course.get();
 			
@@ -115,7 +115,7 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
 		}
 	}
 	
@@ -129,16 +129,16 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"";
+			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}";
 			
 			enrollmentRepo.deleteByCourse(course.get());
 			courseRepo.deleteById(id);
 			
-			return APIUtils.baseJSON(true, "msg") + "\"Course Sucessfully Deleted\"";
+			return APIUtils.baseJSON(true, "msg") + "\"Course Sucessfully Deleted\"}";
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class CourseController {
 			
 			Optional<Course> course = courseRepo.findById(id);
 			
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\""; 
+			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}"; 
 			
 			Iterable<Enrollment> enrollments = enrollmentRepo.findByCourse(course.get());
 			
@@ -160,7 +160,7 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
 		}
 	}
 	
@@ -173,10 +173,10 @@ public class CourseController {
 			if(!AuthorizationMiddleware.authorize(user, new HashSet<String>(Arrays.asList(Roles.ADMIN.getRole())))) return APIUtils.UNAUTHORIZED_JSON;
 			
 			Optional<Course> course = courseRepo.findById(id);
-			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"";			
+			if(course.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Course Not Found.\"}";			
 			
 			Optional<Faculty> teacher = facultyRepo.findById(teacherId);
-			if(teacher.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"";			
+			if(teacher.isEmpty()) return APIUtils.baseJSON(false, "msg") + "\"Bad Request.\"}";			
 			
 			course.get().setTeacher(teacher.get());
 			
@@ -184,7 +184,7 @@ public class CourseController {
 		}catch(Exception e) {
 			e.printStackTrace();
 			
-			return APIUtils.baseJSON(false, "msg") + "\"Error\"";
+			return APIUtils.baseJSON(false, "msg") + "\"Error\"}";
 		}
 	}
 }

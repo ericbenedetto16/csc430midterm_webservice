@@ -10,8 +10,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class APIUtils {
-	public static final String LOGGED_OUT_JSON = "{ \"success\": false, \"msg\": \"You Must Be Logged In to Access This Resource\"";
-	public static final String UNAUTHORIZED_JSON = "{ \"success\": false, \"msg\": \"You Are Not Authorized to Access This Resource\"";
+	public static final String LOGGED_OUT_JSON = "{\"success\": false, \"msg\": \"You Must Be Logged In to Access This Resource\"}";
+	public static final String UNAUTHORIZED_JSON = "{\"success\": false, \"msg\": \"You Are Not Authorized to Access This Resource\"}";
 	
 	public static HasherObject hasher(byte[] salt, String password) {
 		try {
@@ -39,15 +39,15 @@ public class APIUtils {
 	}
 	
 	public static String baseJSON(Boolean success, String secondAttribute) {
-		return "{ \"success\": " + success + ", \"" + secondAttribute + "\":";
+		return "{\"success\": " + success + ", \"" + secondAttribute + "\":";
 	}
 	
 	public static String baseJSON(Boolean success, String secondAttribute, Object o) {
 		try {
-			return "{ \"success\": " + success + ", \"" + secondAttribute + "\":" + new ObjectMapper().writeValueAsString(o);
+			return "{\"success\": " + success + ", \"" + secondAttribute + "\":" + new ObjectMapper().writeValueAsString(o) + "}";
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
-			return baseJSON(false, "msg") + "Error While Parsing JSON";
+			return baseJSON(false, "msg") + "Error While Parsing JSON" + "}";
 		}
 	}
 }
