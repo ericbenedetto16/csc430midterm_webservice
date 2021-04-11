@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.middleware.AuthenticationMiddleware;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.middleware.AuthorizationMiddleware;
@@ -32,6 +33,7 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Faculty;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Role;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.User;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value="/api/v1/faculty", produces={"application/json"})
 public class FacultyController {

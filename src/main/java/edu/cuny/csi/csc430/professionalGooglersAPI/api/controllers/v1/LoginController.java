@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.payloads.Credentials;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.SessionRepository;
@@ -14,6 +15,7 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.AuthenticationObjec
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.User;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.middleware.AuthenticationMiddleware;
 
+@CrossOrigin
 @RestController
 @RequestMapping(value="/api/v1/login", produces={"application/json"})
 public class LoginController {
