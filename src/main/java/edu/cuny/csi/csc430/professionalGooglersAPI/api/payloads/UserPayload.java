@@ -13,13 +13,6 @@ public class UserPayload {
 		this.password = password;
 	}
 	
-	@JsonCreator
-	public UserPayload(String firstName, String lastName, String email) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-	}
-	
 	public String getFirstName() {
 		return firstName;
 	}

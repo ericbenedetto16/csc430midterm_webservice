@@ -7,14 +7,9 @@ public class FacultyPayload extends UserPayload {
 	private Boolean active = true;
 	
 	@JsonCreator
-	public FacultyPayload(String firstName, String lastName, String email, String password, Double salary) {
+	public FacultyPayload(String firstName, String lastName, String email, String password, Double salary, Boolean active) {
 		super(firstName, lastName, email, password);
-		this.salary = salary;
-	}
-	
-	@JsonCreator
-	public FacultyPayload(String firstName, String lastName, String email, Double salary, Boolean active) {
-		super(firstName, lastName, email);
+		if(active == null) active = true;
 		this.salary = salary;
 		this.active = active;
 	}
