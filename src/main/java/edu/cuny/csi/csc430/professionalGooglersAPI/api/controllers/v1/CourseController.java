@@ -69,6 +69,7 @@ public class CourseController {
 			
 			course.setName(coursePayload.getName());
 			course.setTeacher(teacher);
+			course.setEndDate(coursePayload.getEndDate());
 			courseRepo.save(course);
 			
 			return APIUtils.JSONBuilder(true, "course", course);
@@ -114,6 +115,7 @@ public class CourseController {
 			
 			modifiedCourse.setName(coursePayload.getName());
 			modifiedCourse.setTeacher(teacher);
+			modifiedCourse.setEndDate(coursePayload.getEndDate());
 			modifiedCourse = courseRepo.save(course.get());
 			
 			return APIUtils.JSONBuilder(true, "course", modifiedCourse);

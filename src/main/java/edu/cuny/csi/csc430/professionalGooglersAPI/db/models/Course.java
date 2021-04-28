@@ -3,10 +3,13 @@ package edu.cuny.csi.csc430.professionalGooglersAPI.db.models;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.Temporal;
 import javax.persistence.GenerationType;
+import javax.persistence.TemporalType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.util.Date;
 
 @Entity
 public class Course {
@@ -20,6 +23,9 @@ public class Course {
 	@JoinColumn(nullable = false)
 	@ManyToOne
 	private Faculty teacher;
+
+	@Temporal(TemporalType.DATE)
+	private Date endDate;
 	
 	public Integer getId() {
 		return this.id;
@@ -43,5 +49,13 @@ public class Course {
 	
 	public void setTeacher(Faculty teacher) {
 		this.teacher = teacher;
+	}
+
+	public Date getEndDate() {
+		return this.endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 }
