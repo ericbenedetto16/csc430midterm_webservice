@@ -69,6 +69,8 @@ public class CourseController {
 			
 			course.setName(coursePayload.getName());
 			course.setTeacher(teacher);
+			course.setMaxCapacity(coursePayload.getMaxCapacity());
+			course.setStartDate(coursePayload.getStartDate());
 			course.setEndDate(coursePayload.getEndDate());
 			courseRepo.save(course);
 			
@@ -115,6 +117,8 @@ public class CourseController {
 			
 			modifiedCourse.setName(coursePayload.getName());
 			modifiedCourse.setTeacher(teacher);
+			modifiedCourse.setMaxCapacity(coursePayload.getMaxCapacity());
+			modifiedCourse.setStartDate(coursePayload.getStartDate());
 			modifiedCourse.setEndDate(coursePayload.getEndDate());
 			modifiedCourse = courseRepo.save(course.get());
 			

@@ -6,12 +6,16 @@ import java.util.Date;
 public class CoursePayload {
 	private String name;
 	private Integer teacher;
+	private Integer maxCapacity;
+	private Date startDate;
 	private Date endDate;
-	
+
 	@JsonCreator
-	public CoursePayload(String name, Integer teacher, Date endDate) {
+	public CoursePayload(String name, Integer teacher, Integer maxCapacity, Date startDate, Date endDate) {
 		this.name = name;
 		this.teacher = teacher;
+		this.maxCapacity = maxCapacity;
+		this.startDate = startDate;
 		this.endDate = endDate;
 	}
 	
@@ -21,6 +25,14 @@ public class CoursePayload {
 	
 	public Integer getTeacher() {
 		return teacher;
+	}
+
+	public Integer getMaxCapacity() {
+		return maxCapacity;
+	}
+
+	public Date getStartDate() {
+		return startDate;
 	}
 
 	public Date getEndDate() {
