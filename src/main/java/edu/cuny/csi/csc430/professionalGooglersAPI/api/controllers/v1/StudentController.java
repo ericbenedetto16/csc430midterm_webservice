@@ -22,6 +22,7 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.api.payloads.EnrollmentPayloa
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.payloads.StudentPayload;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.CourseRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.EnrollmentRepository;
+import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.EvaluationRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.RoleRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.SessionRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.StudentRepository;
@@ -31,6 +32,7 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.HasherObject;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.Roles;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Course;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Enrollment;
+import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Evaluation;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Role;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Student;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.User;
@@ -45,6 +47,7 @@ public class StudentController {
 	@Autowired UserRepository userRepo;
 	@Autowired CourseRepository courseRepo;
 	@Autowired EnrollmentRepository enrollmentRepo;
+	@Autowired EvaluationRepository evaluationRepo;
 	
 	@GetMapping("/")
 	public String getAllStudents() {
@@ -140,7 +143,7 @@ public class StudentController {
 			
 			Optional<Student> studentObj = studentRepo.findById(id);
 			
-			if(studentObj.isEmpty() || !studentPayload.isValid()) return APIUtils.BAD_REQUEST_JSON;
+			if(studentObj.isEmpty() || !studentPayload.isValidEdit()) return APIUtils.BAD_REQUEST_JSON;
 			
 			Student student = studentObj.get();
 			student.setGrade(studentPayload.getGrade());
@@ -229,6 +232,24 @@ public class StudentController {
 		}
 	}
 	
+	@GetMapping("/{id}/courses")
+	public String getEnrollmentsByStudentId(@RequestHeader(value = "Authorization", required = false) String sessionToken, @PathVariable Integer id) {
+		try {
+			User user = AuthenticationMiddleware.auth(sessionToken, sessionRepo);
+			if(user == null) return APIUtils.LOGGED_OUT_JSON;
+			
+			if(!AuthorizationMiddleware.authorize(user, new HashSet<String>(Arrays.asList(Roles.STUDENT.getRole())))) return APIUtils.UNAUTHORIZED_JSON;
+			
+			Iterable<Enrollment> enrollments = enrollmentRepo.findByStudentId(id);
+			
+			return APIUtils.JSONBuilder(true, "enrollments", enrollments);
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+			return APIUtils.ERROR_JSON;
+		}
+	}
+	
 	@PostMapping("/{id}/grade")
 	public String gradeStudentByID(@RequestHeader(value = "Authorization", required = false) String sessionToken, @PathVariable Integer id, @RequestBody EnrollmentPayload enrollmentPayload) {
 		try {
@@ -250,6 +271,8 @@ public class StudentController {
 			if(enrollment.get().getGrade() != null) return APIUtils.BAD_REQUEST_JSON;
 			
 			enrollment.get().setGrade(enrollmentPayload.getGrade());
+			
+			enrollmentRepo.save(enrollment.get());
 			
 			return APIUtils.JSONBuilder(true, "msg", "Grade Successfully Submitted");
 		}catch(Exception e) {
@@ -281,7 +304,22 @@ public class StudentController {
 			
 			enrollment.get().setGrade(enrollmentPayload.getGrade());
 			
+			enrollmentRepo.save(enrollment.get());
+			
 			return APIUtils.JSONBuilder(true, "msg", "Grade Successfully Submitted.");
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+			return APIUtils.ERROR_JSON;
+		}
+	}
+	
+	@GetMapping("/{id}/evaluations") 
+	public String getEvaluationsByTeacherID(@PathVariable Integer id) {
+		try {
+			Iterable<Evaluation> evaluations = evaluationRepo.findByStudentId(id);
+			
+			return APIUtils.JSONBuilder(true, "evaluations", evaluations);
 		}catch(Exception e) {
 			e.printStackTrace();
 			

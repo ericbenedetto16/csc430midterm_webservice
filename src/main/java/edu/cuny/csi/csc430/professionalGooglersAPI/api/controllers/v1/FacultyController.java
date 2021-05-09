@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.middleware.AuthenticationMiddleware;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.middleware.AuthorizationMiddleware;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.payloads.FacultyPayload;
+import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.CourseRepository;
+import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.EnrollmentRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.EvaluationRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.FacultyRepository;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.RoleRepository;
@@ -28,6 +30,8 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.api.repositories.UserReposito
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.APIUtils;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.HasherObject;
 import edu.cuny.csi.csc430.professionalGooglersAPI.api.utils.Roles;
+import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Course;
+import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Enrollment;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Evaluation;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Faculty;
 import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Role;
@@ -42,6 +46,8 @@ public class FacultyController {
 	@Autowired FacultyRepository facultyRepo;
 	@Autowired RoleRepository roleRepo;
 	@Autowired EvaluationRepository evaluationRepo;
+	@Autowired CourseRepository courseRepo;
+	@Autowired EnrollmentRepository enrollmentRepo;
 	
 	@GetMapping("/") 
 	public String getAllFaculty() {
@@ -114,14 +120,35 @@ public class FacultyController {
 		}
 	}
 	
-	@GetMapping("/{id}/evaluations") 
-	public String getEvaluationsByTeacherID(@RequestHeader(value = "Authorization", required = false) String sessionToken, @PathVariable Integer id) {
+	@GetMapping("/{id}/courses") 
+	public String getCoursesByTeacherID(@PathVariable Integer id) {
 		try {
-			User user = AuthenticationMiddleware.auth(sessionToken, sessionRepo);
-			if(user == null) return APIUtils.LOGGED_OUT_JSON;
+			Iterable<Course> courses = courseRepo.findByTeacherId(id);
 			
-			if(!AuthorizationMiddleware.authorize(user, new HashSet<String>(Arrays.asList(Roles.ADMIN.getRole())))) return APIUtils.UNAUTHORIZED_JSON;
+			return APIUtils.JSONBuilder(true, "courses", courses);
+		}catch(Exception e) {
+			e.printStackTrace();
 			
+			return APIUtils.ERROR_JSON;
+		}
+	}
+	
+	@GetMapping("/{id}/students")
+	public String getStudentByTeacherID(@PathVariable Integer id) {
+		try {
+			Iterable<Enrollment> enrollments = enrollmentRepo.findByCourseTeacherId(id);
+			
+			return APIUtils.JSONBuilder(true, "enrollments", enrollments);
+		}catch(Exception e) {
+			e.printStackTrace();
+			
+			return APIUtils.ERROR_JSON;
+		}
+	}
+	
+	@GetMapping("/{id}/evaluations") 
+	public String getEvaluationsByTeacherID(@PathVariable Integer id) {
+		try {
 			Iterable<Evaluation> evaluations = evaluationRepo.findByTeacherId(id);
 			
 			return APIUtils.JSONBuilder(true, "evaluations", evaluations);

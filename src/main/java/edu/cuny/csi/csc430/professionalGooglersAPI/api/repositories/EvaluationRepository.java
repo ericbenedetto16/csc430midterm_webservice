@@ -5,4 +5,5 @@ import edu.cuny.csi.csc430.professionalGooglersAPI.db.models.Evaluation;
 
 public interface EvaluationRepository extends CrudRepository<Evaluation, Integer> {
 	public Iterable<Evaluation> findByTeacherId(Integer id);
+	public Iterable<Evaluation> findByStudentId(Integer id);
 }

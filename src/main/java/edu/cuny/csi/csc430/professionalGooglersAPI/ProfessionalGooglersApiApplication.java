@@ -129,7 +129,7 @@ public class ProfessionalGooglersApiApplication {
 				studentUser = userRepo.save(studentUser);
 			}
 
-			User parentUser = userRepo.findByFirstNameAndLastName("Stu", "Dent");
+			User parentUser = userRepo.findByFirstNameAndLastName("Par", "Ent");
 			if(parentUser == null) {
 				parentUser = new User();
 				parentUser.setFirstName("Par");

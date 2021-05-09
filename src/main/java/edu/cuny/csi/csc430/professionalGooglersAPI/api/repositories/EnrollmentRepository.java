@@ -12,5 +12,7 @@ public interface EnrollmentRepository extends CrudRepository<Enrollment, Integer
 	public void deleteByCourse(Course course);
 	
 	public Iterable<Enrollment> findByCourse(Course course);
+	public Iterable<Enrollment> findByStudentId(Integer studentId);
+	public Iterable<Enrollment> findByCourseTeacherId(Integer teacherId);
 	public Optional<Enrollment> findByStudentAndCourse(Student student, Course course);
 }
